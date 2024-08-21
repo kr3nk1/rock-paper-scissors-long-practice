@@ -1,0 +1,1 @@
+console.log(`${wins} wins - ${losses} losses - ${ties} ties`);
