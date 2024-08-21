@@ -34,24 +34,37 @@ function printHelp() {
 
 function getWinner(move1, move2) {
   if (move1 === move2) { // tie
-    console.log("You tie.\n");
     return 0;
   }
   else if (VALID_MOVES[move1].winsAgainst === move2) { // win
-    console.log("You win!\n");
     return 1;
   } else { // loss
-    console.log("You lose...\n");
     return -1;
   }
 }
 
 function getCPUMove() {
-  // Your code here
+  const validMoveKeys = Object.keys(VALID_MOVES);
+  const randomIndex = Math.floor(Math.random() * validMoveKeys.length); 
+  return validMoveKeys[randomIndex];
 }
 
 function processMove(move1, move2) {
-  // Your code here
+
+  console.log(`You pick ${move1}, computer picks ${move2}.`);
+
+  if (getWinner(move1, move2) === 0) { // tie
+   console.log("You tie.\n");
+   ties++;
+ }
+ else if (getWinner(move1, move2) === 1) { // win
+   console.log("You win!\n");
+   wins++;
+ } else { // loss
+   console.log("You lose...\n");
+   losses++;
+ } 
+  
 }
 
 /******************************* MAIN FUNCTION *******************************/
@@ -68,25 +81,10 @@ function promptInput(rl) {
       rl.close();
       return;
     } else if (VALID_MOVES[move1]){
-      const validMoveKeys = Object.keys(VALID_MOVES);
-      const randomIndex = Math.floor(Math.random() * validMoveKeys.length);
-      const move2 = validMoveKeys[randomIndex];
 
-      console.log(`You pick ${move1}, computer picks ${move2}.`);
+      const move2 = getCPUMove();
+      processMove(move1, move2);
 
-      getWinner(cmd, cpu);
-
-    /*   if (move1 === move2) { // tie
-        console.log("You tie.\n");
-        ties++;
-      }
-      else if (VALID_MOVES[move1].winsAgainst === move2) { // win
-        console.log("You win!\n");
-        wins++;
-      } else { // loss
-        console.log("You lose...\n");
-        losses++;
-      } */
     } else {
       console.log("\nInvalid command.\n");
       printHelp();
@@ -103,12 +101,7 @@ function initializeGame() {
     output: process.stdout
   });
   console.log("Welcome to Rock/Paper/Scissors\n");
-  console.log("  Type 'r' for Rock");
-  console.log("  Type 'p' for Paper");
-  console.log("  Type 's' for Scissors");
-  console.log("  Type 'q' to quit");
-  console.log("  Type 'h' for a list of valid commands\n");
-
+  printHelp();
   promptInput(rl);
 }
 
